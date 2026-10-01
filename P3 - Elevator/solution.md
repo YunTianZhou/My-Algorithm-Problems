@@ -39,7 +39,7 @@ There are two ways to handle each segment:
 If the final descent stops at $l_i$, all segments below it must be handled during the ascent, and all segments from $i$ upward are handled on the final descent. The cost is
 
 $$
-H+2\sum_{j < i}(r_j-l_j)+(H-l_i).
+H+2\sum_{j \lt i}(r_j-l_j)+(H-l_i).
 $$
 
 Also try making no final descent, which costs $H+2\sum_j(r_j-l_j)$. There is no benefit to stopping partway through a gap or a merged segment: a gap can be skipped, and any unfinished segment requires descending to its bottom.
@@ -225,10 +225,10 @@ $$
 
 A downward request $a \to b$ is served either by $p \to L$ when $a \le p$, or by $R \to q$ when $b \ge q$.
 
-For a fixed $q$, every request with $b<q$ must therefore have $a \le p$. Choose the smallest possible peak:
+For a fixed $q$, every request with $b \lt q$ must therefore have $a \le p$. Choose the smallest possible peak:
 
 $$
-p=\max\bigl(s,q,\max_{a>b,\ b<q} a\bigr),
+p=\max\bigl(s,q,\max_{a \gt b,\ b \lt q} a\bigr),
 $$
 
 ignoring the last term if there is no such request. The route costs
@@ -247,7 +247,7 @@ Use an initial excursion $s \to p \to L \to p$, solve the requests inside $[p,q]
 It suffices to consider boundaries satisfying:
 
 - No downward request has $b \le p<a$.
-- No downward request has $b<q \le a$.
+- No downward request has $b \lt q \le a$.
 
 These conditions put each downward request entirely in the initial descent, the middle interval, or the final descent. Let $U(p,q)$ be the union length of downward intervals inside $[p,q]$. The cost is
 
@@ -390,4 +390,3 @@ public:
     }
 };
 ```
-
