@@ -39,7 +39,7 @@ There are two ways to handle each segment:
 If the final descent stops at $l_i$, all segments below it must be handled during the ascent, and all segments from $i$ upward are handled on the final descent. The cost is
 
 $$
-H+2\sum_{j<i}(r_j-l_j)+(H-l_i).
+H+2\sum_{j < i}(r_j-l_j)+(H-l_i).
 $$
 
 Also try making no final descent, which costs $H+2\sum_j(r_j-l_j)$. There is no benefit to stopping partway through a gap or a merged segment: a gap can be skipped, and any unfinished segment requires descending to its bottom.
