@@ -8,7 +8,7 @@ Unfortunately, the skyscraper only has one elevator, and there are no stairs. Th
 
 Luckily, the elevator is extremely fast. It takes only $1$ millisecond to move between any two **adjacent** floors, and it takes negligible time for residents to enter or leave the elevator. The elevator is also very sturdy and can hold any number of residents at the same time.
 
-The designer wants to program the elevator so that when there are $N$ residents waiting fot the elevator, and the $i$-th resident wants to move from floor $S_i$ to floor $T_i$, the elevator will choose the path that gets all residents to their destination **as fast as possible**.
+The designer wants to program the elevator so that when there are $N$ residents waiting for the elevator, and the $i$-th resident wants to move from floor $S_i$ to floor $T_i$, the elevator will choose the path that gets all residents to their destination **as fast as possible**.
 
 However, due to his lack of programming skills, his program design has drew many complaints from the residents.
 
@@ -35,7 +35,7 @@ Find the minimum time (in milliseconds) to get all residents to their destinatio
 Precisely, for all plans $P$ consist of integers that satisfies the following conditions:
 
 - $P_1 = 0$
-- For each $1 \le i \le N$, there exist $1 \le x \lt y \le |P|$, such that $A_i = P_x$ and $B_i = P_y$.
+- For each $1 \le i \le N$, there exist $1 \le x \le y \le |P|$, such that $A_i = P_x$ and $B_i = P_y$.
 
 Find the minimum value of $\sum_{i=2}^{|P|} |P_i - P_{i - 1}|$
 
