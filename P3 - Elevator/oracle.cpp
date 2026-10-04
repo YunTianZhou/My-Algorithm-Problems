@@ -1,4 +1,7 @@
-class Solution {
+#include <bits/stdc++.h>
+using namespace std;
+
+class Oracle {
     using int64 = long long;
     using Request = pair<int64, int64>;
     static constexpr int64 INF = 1LL << 62;

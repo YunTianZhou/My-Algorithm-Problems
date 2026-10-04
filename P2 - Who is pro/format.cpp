@@ -11,21 +11,3 @@ public:
         return "";
     }
 };
-
-int main() {
-    int n, m; cin >> n >> m;
-
-    vector<int> A(m), B(m);
-    vector<string> X(m), Y(m);
-    for (int i = 0; i < m; i++) {
-        int a, b;
-        string x, y;
-        cin >> a >> x >> b >> y;
-        A[i] = a;
-        B[i] = b;
-        X[i] = x;
-        Y[i] = y;
-    }
-
-    cout << Solution().solve(n, m, A, B, X, Y);
-}

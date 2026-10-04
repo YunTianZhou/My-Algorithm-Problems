@@ -1,5 +1,9 @@
 # P0002 Who is pro
 
+**Time limit: 2000 ms per test case.**
+
+---
+
 Scifish and Tim have always argued about who is the true pro, but they could never reach an agreement. One day, Scifish decided to interview other people on the street to gather opinions.
 
 Scifsh interviewed some people on the street. Some of them are Scifsh’s friends, some are Tim’s friends, and some he doesn’t know at all. In order to avoid offending anyone, each interviewee chose to compare only themselves with their best friends, and gave some opinions in the following form:

@@ -1,5 +1,7 @@
 # P0001 Prooooooooooo!
 
+**Time limit: 2000 ms per test case.**
+
 Scifish and Tim are friends, they really like to argue about who is pro. Interestingly, they all firmly believe that the other is.
 
 This is how their chat looks like:

@@ -1,5 +1,7 @@
 # P0003 Elevator
 
+**Time limit: 2000 ms per test case.**
+
 There is a skyscraper with infinite floors, both above and underground. Each floor is numbered using an integer. 
 
 Floor $0$ is the ground floor, floors above it are positive, and floors under it are negative. Floor $i$ is **directly above** floor $i - 1$, and **directly below** floor $i + 1$.
