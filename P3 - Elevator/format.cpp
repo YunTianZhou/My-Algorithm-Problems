@@ -5,6 +5,6 @@ using namespace std;
 class Solution {
 public:
     long long solve(int n, const vector<int>& A, const vector<int>& B) {
-        throw;
+        return 0;
     }
 };
