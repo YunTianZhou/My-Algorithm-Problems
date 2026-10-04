@@ -19,13 +19,13 @@ public:
 
         if (messages[i] == "Tim") {
             score--;
-            while (i > 0 && S[i] == "Tim") i--;
+            while (i > 0 && messages[i] == "Tim") i--;
             i--;
-            while (i > 0 && S[i] == "Tim") i--;
+            while (i > 0 && messages[i] == "Tim") i--;
         }
 
         for (; i > 0; --i)
-            if (messages[i] == "Scifish" && S[i - 1] == "Tim")
+            if (messages[i] == "Scifish" && messages[i - 1] == "Tim")
                 score++;
         
         return score >= k ? "Yes" : "No";

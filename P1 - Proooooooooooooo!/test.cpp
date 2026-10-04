@@ -54,9 +54,7 @@ void run_tests(judge::Runner& runner, const judge::Options& options) {
         if (fraction >= .95) { lo = 2001; hi = 67 * 67 * 67 * 67; }
         else if (fraction >= .80) { lo = 201; hi = 2000; }
         else if (fraction >= .40) { lo = 21; hi = 200; }
-        runner.preparing(t, options.cases);
         auto c = genCaseWithN(uniform_int_distribution<int>(lo, hi)(rng), rng);
-        runner.preparing(t + 1, options.cases);
         if (!runner.test("n=" + to_string(c.n) + " k=" + to_string(c.k),
                     make_tuple(c.n, c.k, move(c.S)), c.ans)) break;
     }
