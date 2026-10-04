@@ -3,7 +3,7 @@
 Each problem has the same structure:
 
 ```text
-P3 - Elevator/
+P# - XXX/
 ├── problem.md    # Statement
 ├── solution.md   # Explanation
 ├── format.cpp    # Your Solution class / submission template
@@ -20,7 +20,7 @@ python3 judge.py P3 --solution /path/to/my_submission.cpp
 python3 judge.py P3 --oracle
 ```
 
-No solution copy/paste, per-problem judge, or registration is needed. Requires
+Requires
 Linux/macOS (POSIX processes), Python 3, and a C++17 compiler with `<bits/stdc++.h>` (g++ by default; set `CXX`
 to choose another compiler). Builds use temporary directories and are cleaned
 up automatically. IDs are case insensitive; a directory path also works.
