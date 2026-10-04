@@ -36,7 +36,7 @@ Find the minimum time (in milliseconds) to get all residents to their destinatio
 
 Precisely, for all plans $P$ consist of integers that satisfies the following conditions:
 
-- $P_1 = 0$
+- $P_1 = 0$.
 - For each $1 \le i \le N$, there exist $1 \le x \le y \le |P|$, such that $A_i = P_x$ and $B_i = P_y$.
 
 Find the minimum value of $\sum_{i=2}^{|P|} |P_i - P_{i - 1}|$
