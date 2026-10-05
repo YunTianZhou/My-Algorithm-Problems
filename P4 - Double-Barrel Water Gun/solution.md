@@ -127,7 +127,7 @@ public:
 
 Instead of updating every state, store consecutive states with equal costs
 as intervals in an ordered map. This gives an $O(N\log N)$ solution directly
-from the DP, without maintaining a sorted vector of negative differences.
+from the DP.
 
 ### Backward DP
 
