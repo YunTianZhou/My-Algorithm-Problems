@@ -142,4 +142,4 @@ LRL
 
 ### Explanation
 
-It is shown that no matter what path you choose, you will get it at least twice.
+It is shown that no matter what path you choose, you will get hit at least twice.
