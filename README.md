@@ -56,8 +56,7 @@ at a time to avoid retaining its potentially very large inputs.
 | CE | Compilation failed | 2 |
 | JE | Setup, generator, or checker failed; or no cases ran | 2 |
 
-Each problem statement specifies a **2000 ms per-case time limit**, passed to
-`runner.set_time_limit(chrono::milliseconds(2000))` by its `test.cpp`. Keep these
+Each problem statement specifies a per-case time limit (e.g. **2000 ms**), passed to `runner.set_time_limit(...)` by its `test.cpp`. Keep these
 values in sync when changing a problem's limit. Cases run in child processes;
 the wall-clock limit covers process startup, solution execution, and checking,
 but excludes test generation, reference-answer calculation, and argument preparation. Displayed

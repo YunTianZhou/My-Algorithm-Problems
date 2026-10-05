@@ -17,6 +17,15 @@ template<class T> std::string preview(const T& value) {
     return text.size() > 100 ? text.substr(0, 100) + "..." : text;
 }
 
+inline std::string preview(const std::string& value) {
+    if (value.empty()) return "<empty>";
+    return value.size() > 100 ? value.substr(0, 100) + "..." : value;
+}
+
+template<class A, class B> std::string preview(const std::pair<A, B>& value) {
+    return "(" + preview(value.first) + ", " + preview(value.second) + ")";
+}
+
 class Runner {
     int passed = 0, wrong = 0, errors = 0, timeouts = 0, skipped = 0;
     int planned = 0, executed = 0;
