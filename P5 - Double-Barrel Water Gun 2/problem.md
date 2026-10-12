@@ -8,9 +8,9 @@ The game consists of $N$ turns. Initially, Bob  are at position $0$.  In each tu
 
 In the previous game, you were responsible for dodging and discovered an optimal strategy that helped you win. Consequently, in this game, Bob will use that same strategy against you.
 
-Before the game begins, you **must inform Bob which two positions you will target in each of the next $N$ turns**. Bob will then choose a movement path based on your shooting  plan to **minimize the number of times he gets hit**.  
+Before the game begins, you **must inform Bob which two positions you will target in each of the next $N$ turns**. Bob will then choose a movement path based on your shooting plan to **minimize the number of total times he gets hit**.
 
-Can you find a shooting plan for the following $N$ turns that **maximizes  the number o times Bob gets hit when he plays optimally**?
+Can you find a shooting plan for the following $N$ turns that **maximizes the total number of times Bob gets hit when he plays optimally**?
 
 ## Problem Description
 
@@ -23,7 +23,7 @@ In the $i$th of the following $N$ turns:
 - Bob can move to the left or to the right by 1 unit of distance.
 - You shoot at positions $A_i$ and $B_i$. If **at least one of the positions is Bob's current position**, he will get hit in this turn.
 
-Find a shooting plan that **maximizes** number of turns Bob gets hit, when he is trying **minimizing** the number of times he gets hit.
+Find a shooting plan that **maximizes** number of turns Bob gets hit, when he is trying **minimizing** the total number of times he gets hit.
 
 
 Precisely, for all valid shooting plans $A_1, A_2, ..., A_N$, $B_1, B_2, ..., B_N$ cosist of integers, find the maximum value of $H$, where its value is determined as follows:
@@ -49,7 +49,7 @@ N
 
 ## Output Specifications
 
-Output a single non-negative integer represents the **maximum number of times you get hit Bob when he plays optimally**.
+Output a single non-negative integer represents the **maximum total number of times you can hit Bob when he plays optimally**.
 
 For each of the  following $N$ lines, output the to two positions you will shoot at each turn.
 
