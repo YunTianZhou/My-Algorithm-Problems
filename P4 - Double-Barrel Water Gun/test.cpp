@@ -143,7 +143,7 @@ bool judge_case(judge::Runner& runner, Case c, int subtask) {
     if (!valid_answer(c.A, c.B, expected, optimum))
         throw logic_error("P4 oracle disagrees with independent DP / produces an invalid path: " + c.label);
     // Keep the checker inputs independent of any submission mutations.
-    return runner.test(c.label + " N=" + to_string(n), make_tuple(n, c.A, c.B), optimum,
+    return runner.test("N=" + to_string(n), make_tuple(n, c.A, c.B), optimum,
         [&](const pair<int, string>& got, int best) {
             return valid_answer(c.A, c.B, got, best);
         });
