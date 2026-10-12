@@ -111,8 +111,9 @@ void run_tests(judge::Runner& runner, const judge::Options& options) {
 ```
 
 Run `python3 judge.py "path/to/problem"`. Tuple elements are arguments to
-`solve`, in order. The third argument is the expected answer. Answers must
-support `operator<<` for diagnostics and, by default, `operator==`. Problems
+`solve`, in order. The third argument is the expected answer. Basic answers
+use `operator<<` for diagnostics; vectors and tuples have bounded previews.
+The default checker uses `operator==`. Problems
 accepting multiple answers can provide a checker as the fourth argument:
 
 ```cpp

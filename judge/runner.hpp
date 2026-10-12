@@ -26,6 +26,25 @@ template<class A, class B> std::string preview(const std::pair<A, B>& value) {
     return "(" + preview(value.first) + ", " + preview(value.second) + ")";
 }
 
+template<class T> std::string preview(const std::vector<T>& values) {
+    std::string out = "[";
+    for (size_t i = 0; i < std::min<size_t>(values.size(), 8); ++i) {
+        if (i) out += ", ";
+        out += preview(values[i]);
+    }
+    if (values.size() > 8) out += ", ...; size=" + std::to_string(values.size());
+    return out + "]";
+}
+
+template<class... T> std::string preview(const std::tuple<T...>& value) {
+    std::string out = "(";
+    std::apply([&](const auto&... parts) {
+        size_t index = 0;
+        ((out += (index++ ? ", " : "") + preview(parts)), ...);
+    }, value);
+    return out + ")";
+}
+
 class Runner {
     int passed = 0, wrong = 0, errors = 0, timeouts = 0, skipped = 0;
     int planned = 0, executed = 0;
