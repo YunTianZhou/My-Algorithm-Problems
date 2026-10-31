@@ -81,6 +81,32 @@ class JudgeTest(unittest.TestCase):
         self.assertIn("3 passed, 0 failed", result.stdout)
         self.assertIn("seed=42", result.stdout)
 
+    def test_no_subtasks_preserves_original_output(self):
+        result = self.run_judge('class Solution { public: int solve() { return 7; } };', '''
+            void run_tests(judge::Runner& r, const judge::Options&) {
+                r.section("All cases", 1);
+                r.test("sample", make_tuple(), 7);
+            }
+        ''')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertNotIn("Subtasks", result.stdout)
+        self.assertNotIn("  Verdict:", result.stdout)
+        self.assertRegex(result.stdout, r"Summary: 1 passed, 0 failed\.\n"
+                         r"  AC 1  ·  WA 0  ·  RE 0  ·  TLE 0  ·  Skipped 0\n"
+                         r"Total runtime: [\d.]+ ms\nMax single-case runtime: [\d.]+ ms\n")
+
+    def test_subtask_summary_format_and_colors(self):
+        result = self.run_judge('class Solution { public: int solve() { return 7; } };', '''
+            void run_tests(judge::Runner& r, const judge::Options&) {
+                for (int i = 1; i <= 3; ++i) {
+                    r.section("Subtask " + to_string(i), 1);
+                    r.test("sample", make_tuple(), i == 2 ? 0 : 7);
+                }
+            }
+        ''', "--color", "always")
+        self.assertIn("Subtasks 2/3 accepted: \033[1;32mAC\033[0m | "
+                      "\033[1;31mWA\033[0m | \033[1;32mAC\033[0m\n", result.stdout)
+
     def test_wrong_answer_and_exception(self):
         result = self.run_judge('''
             class Solution { public: int solve(int x) {
@@ -89,11 +115,11 @@ class JudgeTest(unittest.TestCase):
             } };
         ''', '''
             void run_tests(judge::Runner& r, const judge::Options&) {
-                r.section("wrong answer");
+                r.section("Subtask 1");
                 r.test("wrong", make_tuple(0), 1);
-                r.section("exception");
+                r.section("Subtask 2");
                 r.test("throws", make_tuple(1), 1);
-                r.section("passing");
+                r.section("Subtask 3");
                 r.test("continues", make_tuple(0), 0);
             }
         ''')
@@ -102,6 +128,14 @@ class JudgeTest(unittest.TestCase):
         self.assertIn("| RE | fixture error", result.stdout)
         self.assertIn("1 passed, 2 failed", result.stdout)
         self.assertIn("Final verdict: RE", result.stdout)
+        sections = re.findall(r"── (.*?) ──\n(.*?)(?=\n── |\nSummary:)", result.stdout, re.S)
+        self.assertEqual([re.search(r"Verdict: (\w+)", body)[1] for _, body in sections],
+                         ["WA", "RE", "AC"])
+        summary = result.stdout.split("Summary: ")[1].strip()
+        self.assertIn("\nTotal runtime:", summary)
+        self.assertIn("\nMax single-case runtime:", summary)
+        self.assertIn("Subtasks 1/3 accepted: WA | RE | AC\n", summary)
+        self.assertIn("Final verdict: RE", summary)
 
     def test_compile_error(self):
         result = self.run_judge("not valid C++", "")
@@ -190,11 +224,11 @@ class JudgeTest(unittest.TestCase):
             } };
         ''', '''
             void run_tests(judge::Runner& r, const judge::Options&) {
-                r.section("first", 3);
+                r.section("Subtask 1", 3);
                 r.test("wrong", make_tuple(0), 1);
                 r.test("skipped-one", make_tuple(99), 99);
                 r.test("skipped-two", make_tuple(99), 99);
-                r.section("second", 1);
+                r.section("Subtask 2", 1);
                 r.test("next-subtask", make_tuple(5), 5);
             }
         ''')
@@ -202,6 +236,7 @@ class JudgeTest(unittest.TestCase):
         self.assertIn("Final verdict: WA", result.stdout)
         self.assertIn("1 passed, 1 failed", result.stdout)
         self.assertIn("Skipped 2", result.stdout)
+        self.assertIn("Subtasks 1/2 accepted: WA | AC\n", result.stdout)
         self.assertNotIn("skipped-one", result.stdout)
         self.assertNotIn("must not execute", result.stdout)
 
@@ -215,19 +250,20 @@ class JudgeTest(unittest.TestCase):
         ''', '''
             void run_tests(judge::Runner& r, const judge::Options&) {
                 r.set_time_limit(chrono::milliseconds(100));
-                r.section("timeout", 4);
+                r.section("Subtask 1", 4);
                 if (r.test("infinite", make_tuple(1), 1))
                     throw runtime_error("timeout must return false");
-                r.section("crash", 2);
+                r.section("Subtask 2", 2);
                 r.test("signal", make_tuple(2), 2);
-                r.section("healthy", 1);
+                r.section("Subtask 3", 1);
                 r.test("after-failures", make_tuple(0), 0);
             }
         ''')
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("1 passed, 2 failed", result.stdout)
-        self.assertIn("TLE 1", result.stdout)
-        self.assertIn("RE 1", result.stdout)
+        self.assertIn("Verdict: TLE", result.stdout)
+        self.assertIn("Verdict: RE", result.stdout)
+        self.assertIn("Verdict: AC", result.stdout)
         self.assertIn("Skipped 4", result.stdout)
         self.assertIn("exceeded 100 ms", result.stdout)
 

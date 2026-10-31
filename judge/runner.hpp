@@ -49,6 +49,10 @@ class Runner {
     int passed = 0, wrong = 0, errors = 0, timeouts = 0, skipped = 0;
     int planned = 0, executed = 0;
     bool blocked = false, color;
+    bool section_open = false;
+    int section_code = 0;
+    bool section_is_subtask = false;
+    std::vector<int> subtask_results;
     double total_ms = 0, max_ms = 0;
     bool timing_complete = true;
     bool progress_open = false;
@@ -69,6 +73,19 @@ class Runner {
 
     std::string paint(const std::string& text, const char* code) const {
         return color ? std::string("\033[") + code + "m" + text + "\033[0m" : text;
+    }
+
+    void close_section() {
+        close_progress();
+        if (!section_open) return;
+        section_open = false;
+        if (!section_is_subtask) return;
+        const char* names[] = {"AC", "WA", "JE", "RE", "TLE"};
+        const char* colors[] = {"1;32", "1;31", "1;35", "1;35", "1;33"};
+        std::cout << "  Verdict: "
+                  << (executed ? paint(names[section_code], colors[section_code]) : "---")
+                  << '\n';
+        subtask_results.push_back(executed ? section_code : -1);
     }
 
     template<class Args> static auto invoke(Args& args) {
@@ -138,7 +155,10 @@ public:
     }
 
     void section(const std::string& name, int cases = 0) {
-        close_progress();
+        close_section();
+        section_open = true;
+        section_code = 0;
+        section_is_subtask = name.rfind("Subtask ", 0) == 0;
         planned = cases;
         executed = 0;
         blocked = false;
@@ -232,7 +252,11 @@ public:
             total_ms += measured_ms;
             max_ms = std::max(max_ms, measured_ms);
         } else timing_complete = false;
-        if (code == 2) throw std::runtime_error("case evaluation failed");
+        section_code = code;
+        if (code == 2) {
+            close_section();
+            throw std::runtime_error("case evaluation failed");
+        }
         if (code == 0) ++passed;
         else if (code == 1) ++wrong;
         else if (code == 4) ++timeouts;
@@ -250,7 +274,7 @@ public:
 
     // Internal codes consumed by judge.py: 0 AC, 1 WA, 2 JE, 3 RE, 4 TLE.
     int finish() {
-        close_progress();
+        close_section();
         if (passed + wrong + errors + timeouts == 0) {
             std::cerr << "Judge error: no test cases were run\n";
             return 2;
@@ -261,8 +285,20 @@ public:
                   << "  ·  " << paint("WA " + std::to_string(wrong), "31")
                   << "  ·  " << paint("RE " + std::to_string(errors), "35")
                   << "  ·  " << paint("TLE " + std::to_string(timeouts), "33")
-                  << "  ·  Skipped " << skipped
-                  << "\nTotal runtime: " << (timing_complete ? runtime(total_ms) : "---")
+                  << "  ·  Skipped " << skipped;
+        if (!subtask_results.empty()) {
+            int accepted = 0;
+            for (int code : subtask_results) accepted += code == 0;
+            std::cout << "\nSubtasks " << accepted << '/' << subtask_results.size() << " accepted: ";
+            const char* names[] = {"AC", "WA", "JE", "RE", "TLE"};
+            const char* colors[] = {"1;32", "1;31", "1;35", "1;35", "1;33"};
+            for (size_t i = 0; i < subtask_results.size(); ++i) {
+                if (i) std::cout << " | ";
+                int code = subtask_results[i];
+                std::cout << (code < 0 ? "---" : paint(names[code], colors[code]));
+            }
+        }
+        std::cout << "\nTotal runtime: " << (timing_complete ? runtime(total_ms) : "---")
                   << "\nMax single-case runtime: " << (timing_complete ? runtime(max_ms) : "---")
                   << '\n';
         return errors ? 3 : timeouts ? 4 : wrong ? 1 : 0;
