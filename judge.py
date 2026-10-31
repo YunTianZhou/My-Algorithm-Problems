@@ -85,6 +85,12 @@ def main():
     # Separate namespaces prevent generator helpers from colliding with a
     # submission's globals. Preload standard headers outside those namespaces.
     # Renaming main allows the existing format.cpp submission style as well.
+    # Compile the submission before any judge/oracle declarations, so it cannot
+    # call the reference implementation. Only --oracle exposes that alias.
+    reference = f'''namespace reference {{
+#include {json.dumps(str(oracle))}
+}}
+'''
     submission = 'using Solution = reference::Oracle;' if args.oracle else f'''namespace submission {{
 #define main submission_main
 #include {json.dumps(str(solution))}
@@ -94,11 +100,10 @@ using submission::Solution;
 '''
     source = f'''#include <bits/stdc++.h>
 using namespace std;
-namespace reference {{
-#include {json.dumps(str(oracle))}
-}}
+{reference if args.oracle else ''}
 {submission}
 #include {json.dumps(str(ROOT / "judge/runner.hpp"))}
+{reference if not args.oracle else ''}
 namespace problem {{
 #include {json.dumps(str(tests))}
 }}

@@ -192,6 +192,29 @@ class JudgeTest(unittest.TestCase):
         self.assertIn("\033[1;32m", result.stdout)
         self.assertIn("Final verdict: AC", result.stdout)
 
+    def test_submission_cannot_call_oracle(self):
+        result = self.run_judge('''
+            class Solution { public: int solve() {
+                return reference::Oracle().solve();
+            } };
+        ''', '''
+            void run_tests(judge::Runner& r, const judge::Options&) {
+                r.test("reference access", make_tuple(), reference::Oracle().solve());
+            }
+        ''')
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("Final verdict: CE", result.stdout)
+        self.assertIn("reference", result.stderr)
+
+    def test_tests_can_still_call_oracle(self):
+        result = self.run_judge('class Solution { public: int solve() { return 7; } };', '''
+            void run_tests(judge::Runner& r, const judge::Options&) {
+                r.test("reference", make_tuple(), reference::Oracle().solve());
+            }
+        ''')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Final verdict: AC", result.stdout)
+
     def test_checker_exception_is_judge_error(self):
         result = self.run_judge(
             "class Solution { public: int solve() { return 0; } };", '''
